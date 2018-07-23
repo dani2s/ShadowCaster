@@ -1,0 +1,50 @@
+'''
+Created on 23 jul. 2018
+
+@author: daniela
+'''
+import pandas as pd
+from sklearn.svm import OneClassSVM
+import matplotlib.pyplot as plt
+from Bio import SeqIO
+from Bio.Seq import translate
+
+
+def alienSVM(kmerFile, fastaCds, nuVal):
+        
+    #merge kmer and codon usage dataframes
+    df1 = pd.read_csv('kl_codonUsage.csv', index_col = 0)
+    df2 = pd.read_csv(kmerFile, index_col = 0)
+    result = pd.concat([df1, df2], axis=1)
+    result.columns = ['codon', 'kmer']
+    
+    clf = OneClassSVM(nu=float(nuVal))
+    clf.fit(result)
+    y_pred = clf.predict(result)
+    result['pred'] = y_pred
+    
+    dfOutliers = result[result['pred'] == -1]
+    hostDf = result[result['pred'] == 1]
+    
+    #Plot outliers obtained with One Class SVM
+    plotSVM(hostDf, dfOutliers)
+    
+    #save alien sequences (protein alphabet)
+    record_dict = SeqIO.to_dict(SeqIO.parse(fastaCds, "fasta"))
+    with open('alien_genes.fasta', 'w') as outWrite:
+        for i in dfOutliers.index.tolist():
+            line = translate(str(record_dict[i].seq), to_stop=True) 
+            outWrite.write('>%s\n%s\n' %(i,line))
+
+
+def plotSVM(hostDf, dfOutliers):
+    fig = plt.figure()
+    fig.suptitle("One Class Support Vector Machine", fontsize=14)      
+    ax1 = fig.add_subplot(111) #411 means 4 rows and 1 column of plot windows; the third digit specifies the order
+    ax1.scatter(list(hostDf.kmer), list(hostDf.codon), label='native', color = 'lavender')
+    ax1.scatter(list(dfOutliers.kmer), list(dfOutliers.codon), label='alien genes', color = 'green')
+    ax1.set_ylabel('4-mers')
+    ax1.set_xlabel('Codon usage')
+    ax1.legend(loc='upper left', fontsize='x-small')
+    plt.savefig('plot_aliens.png')
+    #plt.show()
