@@ -5,7 +5,7 @@ A software with a hybrid approach for the detection of horizontal gene transfer 
 Documentation
 -------------
 
-Documentation is hosted on [readthedocs]
+Documentation is hosted on [readthedocs](shadowcaster.readthedocs.io)
 
 
 Contribute

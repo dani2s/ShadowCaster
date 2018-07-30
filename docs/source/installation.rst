@@ -56,7 +56,3 @@ Resolve all dependencies, see above and then execute:
     python setup.py install
 
 This will install ShadowCaster under your home folder.
-
-::
-
-    python setup.py install
