@@ -1,4 +1,23 @@
 #!/usr/bin/perl -w
+
+############################################################################
+#    This file is part of ShadowCaster.
+#    Copyright (C) 2018  Daniela Sanchez and Aminael Sanchez
+#
+#    ShadowCaster is free software: you can redistribute it and/or modify
+#    it under the terms of the GNU General Public License as published by
+#    the Free Software Foundation, either version 3 of the License, or
+#    (at your option) any later version.
+#
+#    ShadowCaster is distributed in the hope that it will be useful,
+#    but WITHOUT ANY WARRANTY; without even the implied warranty of
+#    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+#    GNU General Public License for more details.
+#
+#    You should have received a copy of the GNU General Public License
+#    along with this program.  If not, see <http://www.gnu.org/licenses/>.
+#############################################################################
+
 use strict;
 use Bio::SeqIO;
 use Bio::SearchIO;
@@ -7,7 +26,7 @@ use File::Spec::Functions 'catfile';
 
 
 my $input_file = $ARGV[0];
-my $output_file = "R_alien.csv";
+my $output_file = "alien_svm.csv";
 my $blastFolder = $ARGV[1];
 my $soft = $ARGV[2];
 my $protPath = $ARGV[3];

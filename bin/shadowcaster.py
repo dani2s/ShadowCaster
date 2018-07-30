@@ -1,8 +1,24 @@
 #!/usr/bin/env python
 '''
-Created on 1 ago. 2017
+    ShadowCaster
+    <one line to give the program's name and a brief idea of what it does.>
+    Copyright (C) 2018  Daniela Sanchez and Aminael Sanchez
 
-@author: daniela
+    ShadowCaster is free software: you can redistribute it and/or modify
+    it under the terms of the GNU General Public License as published by
+    the Free Software Foundation, either version 3 of the License, or
+    (at your option) any later version.
+
+    ShadowCaster is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU General Public License for more details.
+
+    You should have received a copy of the GNU General Public License
+    along with this program.  If not, see <http://www.gnu.org/licenses/>.
+
+    Questions? Please contact asanchez2utpl.edu.ec
+
 '''
 import os
 import datetime
@@ -22,9 +38,8 @@ import shadowcaster.likelihood
 
 def main(config):
     
-    print(shadowcaster.likelihood.__file__)
-    print os.path.dirname(inspect.getfile(shadowcaster.likelihood))
-    originalPath= os.getcwd()
+    
+    originalPath= os.path.dirname(inspect.getfile(shadowcaster.likelihood))
 
 
     #Make working directory
@@ -97,7 +112,7 @@ def main(config):
     
     #Function for calculating likelihood (1min)
     #'/home/daniela/Proyectos/Hemme_2016/orthologs_30.csv'
-    phyloShadowing(originalPath, 'orthologs_probabilities.csv', 'R_alien.csv')
+    phyloShadowing(originalPath, 'orthologs_probabilities.csv', 'alien_svm.csv')
     
     
     print >> sys.stderr, "===Phylogenetic results done===\n\n"

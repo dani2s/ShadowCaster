@@ -1,19 +1,20 @@
 #!/usr/bin/env python
+
 from setuptools import setup
 
 version = '0.9-beta'
 
-description = """ShadoCaster is a software that combines two types of 
-      information - sequence composition, phylogenetic likelihoods. """
+description = """ShadowCaster is a software that combines two types of 
+      information - sequence composition and phylogenetic likelihoods. """
 
 setup(name='ShadowCaster',
       version= version,
-      description= "Detects HGT events using a phylogenetic shadow",
+      description= "Detects Horizontal Gene Transfer events in prokaryotes",
       long_description= description,
       classifiers=[], 
       keywords= [],
       author= 'Daniela Sanchez, Aminael Sanchez',
-      author_email= 'dasanchezsoto@gmail.com',
+      author_email= 'asanchez2@utpl.edu.ec',
       url= 'https://github.com/dani2s/ShadowCaster',
       license= 'GNU General Public License Version 3',
       packages= "shadowcaster",
@@ -25,10 +26,9 @@ setup(name='ShadowCaster',
                         'matplotlib',
                         'pandas',
                         'scipy',
-                        'xlsxwriter',
                         'scikit-learn',
-                        'scipy'], 
-                        #'sphinx-rtd-theme>=0.1.6',
-                        #'Sphinx>=1.2.2'],
+                        'scipy',
+                        'ete3'], 
+                        
       )
 

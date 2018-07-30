@@ -1,14 +1,30 @@
-# ShadowCaster
-A software with a hybrid approach for the detection of horizontal gene transfer events in prokaryotes. Shadowcaster performs three major tasks: (i) alien genes identification, 
-(ii) creation of a phylogenetic shadow, and (iii) Bayesian probability calculation for each alien gene.
+ShadowCaster
+========
+A software with a hybrid approach for the detection of horizontal gene transfer events in prokaryotes.
 
-## Developers
-This software was developed by Daniela Sanchez and Aminael Sanchez from Department of Biological Sciences, Universidad Técnica Particular de Loja, Ecuador.
+Documentation
+-------------
 
-## Documentation
-Documentation is hosted on [readthedocs].
+Documentation is hosted on [readthedocs]
 
-## Support
-If you are having issues, please let us know at [issues](https://github.com/dani2s/ShadowCaster/issues).
+
+Contribute
+----------
+
+- Issue Tracker: [issues](https://github.com/dani2s/ShadowCaster/issues)
+- Source Code: [source code](https://github.com/dani2s/ShadowCaster)
+
+Support
+-------
 
 Send additional enquiries to asanchez2@utpl.edu.ec
+
+Developers
+----------
+
+This software was developed by Daniela Sanchez and Aminael Sanchez from Department of Biological Sciences, Universidad Técnica Particular de Loja, Ecuador.
+
+License
+-------
+
+The project is licensed under the GNU General Public License Version 3.

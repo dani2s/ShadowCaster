@@ -1,8 +1,20 @@
 #!/usr/bin/env python
 '''
-Created on 21 may. 2018
+    This file is part of ShadowCaster.
+    Copyright (C) 2018  Daniela Sanchez and Aminael Sanchez
 
-@author: Daniela Sanchez
+    ShadowCaster is free software: you can redistribute it and/or modify
+    it under the terms of the GNU General Public License as published by
+    the Free Software Foundation, either version 3 of the License, or
+    (at your option) any later version.
+
+    ShadowCaster is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU General Public License for more details.
+
+    You should have received a copy of the GNU General Public License
+    along with this program.  If not, see <http://www.gnu.org/licenses/>.
 '''
 
 from ete3 import NCBITaxa
@@ -48,10 +60,6 @@ def arguments():
         
     return args
     
-
-
-#check the input check check
-
 
 
 def get_taxonomy(updateBool, spName):
@@ -158,9 +166,7 @@ def main(args):
     
     identOrg, genusList, rankList, kingList = getIds(args.email,lineage, args.sp_name, genus, rankTax, ownSuperkingdom, otherSuperkingdom)
     
-    #blast results
-    #blastList
-     
+
     #Remove duplicate from the other lists
     list1 = genusList + kingList
     lenList1 = len(list1) + len(identOrg)
@@ -177,7 +183,6 @@ def main(args):
         ncbiFetch(args.email, i)
     print "Name of each fasta file: organism's binomial name and id(nucleotide database)"
     
-    #print "END :)"
     
 if __name__ == '__main__':
     args = arguments()
