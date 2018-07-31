@@ -57,7 +57,7 @@ def arguments():
     parser.add_argument('-v','--version', action='version',
       version=get_version())
     
-    return config_d
+    return config_d, args
 
 
 

@@ -1,4 +1,4 @@
-#!/usr/bin/env python
+#!/usr/bin/python
 '''
     ShadowCaster
     <one line to give the program's name and a brief idea of what it does.>
@@ -33,15 +33,10 @@ from shadowcaster.orthologs import Orthologs
 from shadowcaster.orthologs_parse import ParseOrthologsResults
 from shadowcaster.blast_aliens import BlastAtyipical
 from shadowcaster.likelihood import phyloShadowing
-import shadowcaster.likelihood
 
 
 def main(config):
     
-    
-    originalPath= os.path.dirname(inspect.getfile(shadowcaster.likelihood))
-
-
     #Make working directory
     wDir = os.path.join(os.getcwd(), datetime.datetime.now().strftime('%Y-%m-%d_%H-%M-%S'))
     os.mkdir(wDir)      
@@ -67,12 +62,12 @@ def main(config):
     
     #Instance Parametric class  (13sec)
     faaMerge = 'mergeCDS.fasta' 
-    kmer = ParametricMethods(config['qGenome'], faaMerge,'chi2',4,reverse=False)
+    kmer = ParametricMethods(config['queryGenome'], faaMerge,'chi2',4,reverse=False)
     kmerDf = kmer.metricMeasure()
     print >> sys.stderr, "=====k-mer frequecies are calculated===="
 
     #Instance Codon Usage class (5 sec)
-    CU = CodonUsage(config['qGenome'])
+    CU = CodonUsage(config['queryGenome'])
     CU.metrics()
     print >> sys.stderr, "=======Codon Usage is calculated======="
     
@@ -80,7 +75,7 @@ def main(config):
     #Call R script  (6 sec)
     print >> sys.stderr, "===Detecting alien with One Class SVM==="
     phase1Result = '%s/alien_genes.fasta' %phase1
-    alienSVM(kmerDf, config['qGenome'], config['nuSVM'])
+    alienSVM(kmerDf, config['queryGenome'], config['nuSVM'])
 
 
     print >> sys.stderr, "==Composition results can be found in parametric folder==\n"
@@ -95,24 +90,23 @@ def main(config):
     
     print >> sys.stderr, "====Starting OrthoMcl===="
     #Instance Orthologs class (1 hour each round 10-15 min)
-    orthoMcl = Orthologs(config['ortho'], config['qProteome'], config['prots'])
+    orthoMcl = Orthologs(config['orthomcl_config'], config['queryProteome'], config['proteomes'])
     orthoMcl.performOrthoMcl() 
-    print >> sys.stderr, "====OrthoMcl finished==="
+    print >> sys.stderr, "=====OrthoMcl finished====="
 
     #Instance Parse orthologs results (13 min)
-    orthoResults = ParseOrthologsResults(config['prots'], config['qProteome'])
+    orthoResults = ParseOrthologsResults(config['proteomes'], config['queryProteome'])
     listProteomes = orthoResults.getIdentity()
-    print listProteomes
+    
     print >> sys.stderr, "====Orthologs results are parsed===\n"
     
     #Instance Blast atypical class (5 min)
-    atypical = BlastAtyipical(originalPath,listProteomes, phase1Result, config['prots'], config['blastp'], config['db26'])
+    atypical = BlastAtyipical(listProteomes, phase1Result, config['proteomes'], config['blastp'], config['db26'])
     atypical.performBlastp()
     print >> sys.stderr, "====Blast atypical genes done====\n\n"
     
     #Function for calculating likelihood (1min)
-    #'/home/daniela/Proyectos/Hemme_2016/orthologs_30.csv'
-    phyloShadowing(originalPath, 'orthologs_probabilities.csv', 'alien_svm.csv')
+    phyloShadowing('orthologs_probabilities.csv', 'alien_svm.csv')
     
     
     print >> sys.stderr, "===Phylogenetic results done===\n\n"
@@ -124,7 +118,7 @@ if __name__ == '__main__':
     print "*********ShadowCaster*********"
     print '******************************\n\n'
     print 'Date:%s' %a
-    config = arguments()
+    config, args = arguments()
     results = main(config)
     b = datetime.datetime.now()
     c = b - a

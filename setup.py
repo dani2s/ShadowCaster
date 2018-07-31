@@ -1,6 +1,6 @@
-#!/usr/bin/env python
+#!/usr/bin/python
 
-from setuptools import setup
+from setuptools import setup, find_packages
 
 version = '0.9-beta'
 
@@ -17,8 +17,8 @@ setup(name='ShadowCaster',
       author_email= 'asanchez2@utpl.edu.ec',
       url= 'https://github.com/dani2s/ShadowCaster',
       license= 'GNU General Public License Version 3',
-      packages= "shadowcaster",
-      scripts=["bin/shadowcaster"],
+      packages= find_packages(exclude=['ez_setup', 'examples', 'tests']),
+      scripts=['bin/shadowcaster.py','shadowcaster/generate_R_input.pl','shadowcaster/phylo_shadow_model.R'],
       include_package_data=True,
       zip_safe=False,
       install_requires=['numpy',
@@ -28,6 +28,10 @@ setup(name='ShadowCaster',
                         'scipy',
                         'scikit-learn',
                         'ete3'], 
-                        
+      entry_points="""
+      # -*- Entry points: -*-
+      """               
       )
+
+
 
