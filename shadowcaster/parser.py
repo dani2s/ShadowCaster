@@ -41,18 +41,18 @@ def arguments():
     config_d = {}
     #COMPLETE PATH
 
-    config_d['qGenome'] = str(config.get('Files', 'query_genome'))
-    config_d['qProteome'] = str(config.get('Files', 'query_proteome'))
-    config_d['ortho'] = str(config.get('Files', 'orthomcl_config'))
+    config_d['queryGenome'] = str(config.get('Files', 'query_genome'))
+    config_d['queryProteome'] = str(config.get('Files', 'query_proteome'))
+    config_d['orthomcl_config'] = str(config.get('Files', 'orthomcl_config'))
     
-    config_d['prots'] = str(config.get('Path', 'proteomes_folder'))
+    config_d['proteomes'] = str(config.get('Path', 'proteomes_folder'))
     config_d['blastp'] = str(config.get('Path', 'blastp26'))
     config_d['db26'] = str(config.get('Path', 'formatdb26'))
 
     #config_d['kmer_len'] = str(config.get('Parametric', 'kmer_length'))
     #config_d['metric'] = str(config.get('Parametric', 'metrics'))
 
-    config_d['nuSVM'] = float(config.get('Phylogenetic', 'quantile'))
+    config_d['nuSVM'] = float(config.get('Parametric', 'nuSVM'))
 
     parser.add_argument('-v','--version', action='version',
       version=get_version())

@@ -64,3 +64,14 @@ test <- list('id'=dat$V1, 'log'= L)
 outResult <- as.data.frame(test)
 write.csv(outResult, file = args[4])
 
+#clustering likelihoods
+library(cluster)
+rownames(outResult) <- outResult$id
+outResult$id <-NULL
+fannyObj <- fanny(outResult, 2)
+outResult['groups'] = fannyObj$clustering
+hgtCandidates <- outResult[outResult$groups == 2,]
+hgtCandidates$groups <- NULL
+write.csv(hgtCandidates, file = "hgt_candidates.csv")
+
+

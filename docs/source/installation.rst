@@ -22,7 +22,7 @@ Packages
 -  Install python packages using:
 ::
 
-    pip install numpy scipy biopython pandas ete3 scikit-learn
+    pip install numpy scipy biopython pandas ete3 scikit-learn matplotlib
 
 -  R packages: ``cluster``
 
@@ -52,7 +52,7 @@ files. If you have git installed, you can install ShadowCaster by running:
 Resolve all dependencies, see above and then execute:
 ::
 
-    cd .. 
+    cd ShadowCaster/ 
     python setup.py install
 
 This will install ShadowCaster under your home folder.

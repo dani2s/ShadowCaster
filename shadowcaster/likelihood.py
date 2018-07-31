@@ -19,8 +19,8 @@ import os
 
 
 def phyloShadowing(orgPath, orthoProb, alienOutput):
-    imageOut = "histogram_likelihood.png"
-    outputR = "likelihoods.csv"
+    imageOut = "histogram_alienLikelihoods.png"
+    outputR = "alien_likelihoods.csv"
     
     path2Rscript = os.path.join(orgPath, 'phylo_shadow_model.R')
     os.system("Rscript %s %s %s %s %s " %(path2Rscript, orthoProb, alienOutput, imageOut, outputR))

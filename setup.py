@@ -27,7 +27,6 @@ setup(name='ShadowCaster',
                         'pandas',
                         'scipy',
                         'scikit-learn',
-                        'scipy',
                         'ete3'], 
                         
       )
