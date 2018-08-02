@@ -1,7 +1,8 @@
 #!/usr/bin/python
 '''
-    ShadowCaster
-    <one line to give the program's name and a brief idea of what it does.>
+    ShadowCaster implements an evolutionary model to calculate bayesian likelihoods
+    for each 'alien genes' with an unsual sequence composition according to 
+    the host genome background to detect HGT events in prokaryotes. 
     Copyright (C) 2018  Daniela Sanchez and Aminael Sanchez
 
     ShadowCaster is free software: you can redistribute it and/or modify

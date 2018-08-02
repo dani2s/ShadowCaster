@@ -4,8 +4,9 @@ from setuptools import setup, find_packages
 
 version = '0.9-beta'
 
-description = """ShadowCaster is a software that combines two types of 
-      information - sequence composition and phylogenetic likelihoods. """
+description = """ShadowCaster implements an evolutionary model to calculate bayesian likelihoods 
+for each 'alien genes' with an unsual sequence composition according to 
+the host genome background to detect HGT events."""
 
 setup(name='ShadowCaster',
       version= version,

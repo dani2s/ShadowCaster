@@ -33,7 +33,7 @@ p_orth = ortho$Pr_orthologs
 
 # Read in dataset
 #CAMBIO IDENT 0 -- 0.5!!
-dat = read.csv(args[2], sep = "\t", header = FALSE)
+dat = read.csv(args[2], sep = "\t", header = TRUE)
 
 dimDataAxis <- dim.data.frame(dat)[1]
 dimDataRows <- dim.data.frame(dat)[2]
@@ -43,7 +43,7 @@ for (j in 1:dimDataAxis){
 iden <- as.vector(iden);
 probs = vector(length = dimDataRows-1)
 for (i in 1:length(iden)){
- if (iden[i] > 0.5){
+ if (iden[i] > 0.55){
     probs[i] = dnorm(means[i], means[i], stds[i]) * p_orth[i]
   }
   else{
@@ -60,9 +60,8 @@ png(filename = args[3], width = 800, height = 700)
 hist(L, main = "alien CDS")
 dev.off()
 
-test <- list('id'=dat$V1, 'log'= L)
+test <- list('id'=dat$alien_id, 'log'= L)
 outResult <- as.data.frame(test)
-write.csv(outResult, file = args[4])
 
 #clustering likelihoods
 library(cluster)
@@ -70,8 +69,21 @@ rownames(outResult) <- outResult$id
 outResult$id <-NULL
 fannyObj <- fanny(outResult, 2)
 outResult['groups'] = fannyObj$clustering
-hgtCandidates <- outResult[outResult$groups == 2,]
-hgtCandidates$groups <- NULL
-write.csv(hgtCandidates, file = "hgt_candidates.csv")
+write.csv(outResult, file = args[4])
+
+
+dat2 <- outResult[outResult$groups == 2,]
+dat1 <- outResult[outResult$groups == 1,]
+val1 <- min(dat1$log)
+val2 <- min(dat2$log)
+if (val2 < val1){
+	dat2$groups <- NULL
+	write.csv(dat2, file = "hgt_candidates.csv")
+}else{
+	dat1$groups <- NULL
+	write.csv(dat1, file = "hgt_candidates.csv")
+}
+
+
 
 

@@ -1,6 +1,6 @@
 ShadowCaster
 ========
-A software with a hybrid approach for the detection of horizontal gene transfer events in prokaryotes.
+A python implementation of a hybrid approach for the detection of horizontal gene transfer events in prokaryotes.
 
 Documentation
 -------------

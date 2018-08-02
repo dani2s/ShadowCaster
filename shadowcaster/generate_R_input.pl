@@ -23,7 +23,7 @@ use Bio::SeqIO;
 use Bio::SearchIO;
 
 use File::Spec::Functions 'catfile';
-
+use File::Path;
 
 my $input_file = $ARGV[0];
 my $output_file = "alien_svm.csv";
@@ -36,6 +36,13 @@ my @species = grep(/\.(fasta|faa)$/,readdir(DIR));
 closedir(DIR);
 
 open (OUTPUT, ">".$output_file) || die "Can't open $output_file, \n";
+my @rownames = ();
+foreach my $sp (@species){
+	my @t = split(/\./, $sp);
+	push(@rownames, $t[0]);	
+}
+print OUTPUT "alien_id\t".join("\t",@rownames)."\n";
+
 my @vector = ();
 my $frac_id;
 my $qlength;
@@ -89,3 +96,4 @@ while((my $seqobj = $seqIOobj->next_seq())) {
 }
 
 close OUTPUT;
+rmtree $blastFolder;

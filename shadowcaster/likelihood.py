@@ -18,9 +18,15 @@
 import os
 
 
+
 def phyloShadowing(orthoProb, alienOutput):
     imageOut = "histogram_alienLikelihoods.png"
     outputR = "alien_likelihoods.csv"
     
     os.system("phylo_shadow_model.R %s %s %s %s " %(orthoProb, alienOutput, imageOut, outputR))
+
+    
+    
+    
+    
     
