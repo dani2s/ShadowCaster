@@ -16,32 +16,23 @@
     You should have received a copy of the GNU General Public License
     along with this program.  If not, see <http://www.gnu.org/licenses/>.
 '''
-
 from ete3 import NCBITaxa
-from Bio import Entrez, SeqIO
 from argparse import ArgumentParser
+import pandas as pd
 
 import os
+import sys
 import datetime
-import re
-import random
-
+import subprocess
+import glob
 
 def arguments():
     parser = ArgumentParser()
 
-    #Input file
-    parser.add_argument('proteome_file', 
-        help=("Specify the proteome file of the query specie, containing sequences in fasta format."))
-    
     #name of the query specie
-    parser.add_argument('sp_name',
-        help=("Specify name of the query specie, just two words.\
+    parser.add_argument('-n', '--sp_name',
+        help=("Specify name of the query sp, just two words.\
         Between the two words there MUST be an underscore(Escherichia_coli)"))
-    
-    #email for NCBI
-    parser.add_argument('-e','--email',
-        help='Email address to fetch data through NCBI')
     
     #Handle number of species for the shadow
     parser.add_argument('-sp', '--num_sp', default=25, type=int,
@@ -52,14 +43,22 @@ def arguments():
       help=(" First time using? ETE package will download the latest NCBI taxonomy database.\
       If True, ETE will download the latest db from NCBI and overwrite the current local database, default False"))      
     #Output path
-    parser.add_argument('-o', '--out_dir', default=os.curdir,
+    parser.add_argument('-o', '--out_dir', 
       help=("Specify an existing directory where output will be placed."
-            "If not provided, current directory will be used."))
+            "If not provided, a directory with the sp name provided will be created."))
     
     args  = parser.parse_args()
         
     return args
-    
+
+
+def check():
+    rc = subprocess.call(['which', 'esearch'])
+    if rc == 0:
+        print 'esearch installed!\n'
+    else:
+        print 'esearch missing in path! Please check the path in .profile or .bash_profile'
+        sys.exit(0)
 
 
 def get_taxonomy(updateBool, spName):
@@ -73,121 +72,145 @@ def get_taxonomy(updateBool, spName):
     genus = spName.partition('_')[0]
     
     name2taxid = ncbi.get_name_translator([genus])
-    #print name2taxid[genus][0]
+    
     lineage = ncbi.get_lineage(name2taxid[genus][0])
     
     return lineage[2:]
 
-def ncbiSearch(mail,dbase, termSearch, retMax):
-    Entrez.email = mail
-    handle = Entrez.esearch(db=dbase, term = termSearch, retmax=retMax)
-    record = Entrez.read(handle)
-    handle.close()
-    return record['IdList']
+def get_ids(url, exclude_name, maxNum, ids4download):
+    
+    df1 = pd.read_table(url, sep='\t', header=None)
+    df1.columns = ['name', 'url']
+    #print list(df1.name)
+    for i in df1.index.tolist():
+        lenDict = len(ids4download)
+        valName = df1.loc[i,'name']
+        valUrl = df1.loc[i,'url']
+        if lenDict < maxNum:
+            nameComplete = valName.split()
+            binomialName = nameComplete[0] + '_' + nameComplete[1]
+            #print binomialName
+            if binomialName != exclude_name and binomialName not in ids4download.keys():
+                ids4download[binomialName] = valUrl
+        else:
+            break
+         
+    return ids4download
 
-def getIds(mail,lineage, spName, numGenus, numRank, numKing, numKingOther):  
-        
-    name4search = spName.replace("_", " ") 
+def get_ftpPath(dictSp):
+    ncbiComnd= '''esearch -db assembly -query '%s' | 
+    efetch -format docsum | xtract -pattern DocumentSummary -element Organism -block FtpPath -match "@type:RefSeq" -element FtpPath | 
+    sed 's/$/\//' > %s'''
     
-    #Get Genus organisms
-    #numberGenus= numGenus + 1  #add 1 to exclude the same sp later
-    genusSearch = ncbiSearch(mail, "nucleotide", "(txid%s[Organism] AND complete genome[title]" %lineage[-1], numGenus)
-    excludeOrg = ncbiSearch(mail, "nucleotide", "%s[Organism] AND complete genome[title]" %str(name4search), numGenus)
-    genusOrg = list(set(genusSearch) - set(excludeOrg))
+    #Get ftp paths for family and order of query sp(include reference and representative genomes)
+    for i in ['family', 'order', 'otherkingdom']:
+        txid = dictSp[i][2]
+        searchArg1 = '''txid%s[organism] AND "complete genome"[filter] AND "latest refseq"[Filter] AND ("reference genome"[Filter] OR "representative genome"[Filter])''' %txid
+        os.system(ncbiComnd %(searchArg1, dictSp[i][1]))
     
-        
-    #Get ids for superkingdoms
-    superKingdomOrg = ncbiSearch(mail, "nucleotide", "(txid%s[Organism] AND complete genome[title]" %lineage[0], numKing)
-    #Get ids for archae
-    if lineage[0] == 2:
-        superKingdomOther = ncbiSearch(mail, "nucleotide", "(txid2157[Organism] AND complete genome[title]", numKingOther)
-    #Get ids for bacteria
-    if lineage[0] == 2157:
-        superKingdomOther = ncbiSearch(mail, "nucleotide", "(txid2[Organism] AND complete genome[title]", numKingOther)
-    
-    
-    supKg = superKingdomOrg + superKingdomOther
-    
-    
-    #Get sequences for other taxonomic ranks
-    rankOrgs = []
-    for i in lineage[1:len(lineage)-1]:
-        termSearch = "(txid%s[Organism] AND complete genome[title]" %i
-        resultsNcbi = ncbiSearch(mail, "nucleotide", termSearch, numRank*2)
-        #print i , len(resultsNcbi)
-        for val in resultsNcbi:
-            if val not in rankOrgs:
-                rankOrgs.append(val)       
-    
-    return excludeOrg, genusOrg, rankOrgs, supKg
+    #Get ftp paths for phylum and kingdom of query sp (only reference genomes)  
+    for j in ['phylum', 'kingdom']:
+        txid1 = dictSp[j][2]
+        searchArg2 = '''txid%s[organism] AND "complete genome"[filter] AND "latest refseq"[Filter] AND "reference genome"[Filter]''' %txid1
+        os.system(ncbiComnd %(searchArg2, dictSp[j][1]))
 
-
-
-def ncbiFetch(mail, idSp):
-    Entrez.email = mail
-    #Get the organism name to save as org_name.faa
-    handle = Entrez.esummary(db="nucleotide", id=str(idSp))
-    record = Entrez.read(handle)
-    nameRecord = str(record[0]['Title']).split()
-    faaName = nameRecord[0] + '_' + nameRecord[1] + '_' + idSp
-    print str(record[0]['Title']),'\tid:', idSp 
-    #faaName = nameRecord.replace(" ", "_") 
-    handle.close()
+        
+def get_ftpPath4archaea(dictSp):
+    #Only for archae, different search term for taxonomy ranks (include reference and representative genomes)
     
-    #Fetch all the cds(aa) of the specie
-    handle1 = Entrez.efetch(db="nucleotide", id =str(idSp), rettype="fasta_cds_aa", retmode="text")
+    ncbiComnd= '''esearch -db assembly -query '%s' | 
+    efetch -format docsum | xtract -pattern DocumentSummary -element Organism -block FtpPath -match "@type:RefSeq" -element FtpPath | 
+    sed 's/$/\//' > %s'''
+    
+    #Get ftp paths 
+    for a in ['family', 'order', 'phylum', 'kingdom']:
+        txid = dictSp[a][2]
+        searchArg1 = '''txid%s[organism] AND "complete genome"[filter] AND "latest refseq"[Filter] AND ("reference genome"[Filter] OR "representative genome"[Filter])''' %txid
+        os.system(ncbiComnd %(searchArg1, dictSp[a][1]))
+    
+    #Get ftp paths for other superkingdom of query sp    
+    for b in ['otherkingdom']:
+        txid1 = dictSp[b][2]
+        searchArg2 = '''txid%s[organism] AND "complete genome"[filter] AND "latest refseq"[Filter] AND "reference genome"[Filter]''' %txid1
+        os.system(ncbiComnd %(searchArg2, dictSp[b][1]))
+    
+    
+def main(args):
+    if args.out_dir == None: 
+        os.mkdir('%s/' %args.sp_name)
+        os.chdir('%s/' %args.sp_name)
+    else:
+        os.mkdir('%s' %args.out_dir)
+        os.chdir('%s' %args.out_dir)
         
-    #Save each sequence only with protein id(OrthoMCl requirements)
-    pattern = re.compile(r'.*\[protein_id=(\w+\d+.\d)].*')
-    ids = []
-    with open("proteomes/%s.fasta" %faaName, 'w') as fafile:
-        for seq_record in SeqIO.parse(handle1, "fasta"):
-            pattResult = pattern.search(seq_record.description)
-            if not pattResult is None:
-                protId = str(pattResult.group(1))
-                #Write only unique ids
-                if protId not in ids:
-                    fafile.write(">%s\n%s\n" %(protId,str(seq_record.seq)))
-                    ids.append(protId)
-    handle1.close()
-        
-  
-def main(args):    
-    os.mkdir('proteomes/')
+          
     lineage = get_taxonomy(args.update_db, args.sp_name)
     #print lineage
     
-    #define numbers of sequences for the search
-    blast = int(args.num_sp * 0.20)
-    genus = int(args.num_sp * 0.20)
-    rankTax = int(args.num_sp * 0.40)
-    ownSuperkingdom = int(args.num_sp * 0.12)
-    otherSuperkingdom = int(args.num_sp * 0.08)
+    numIds = int(args.num_sp * 0.20)
+    otherKngdm = (4*numIds) + int(args.num_sp * 0.08)
+        
     
-    identOrg, genusList, rankList, kingList = getIds(args.email,lineage, args.sp_name, genus, rankTax, ownSuperkingdom, otherSuperkingdom)
+    if lineage[0] == 2:
+        txOtherKingdm = 2157
+    else:
+        txOtherKingdm = 2
     
-
-    #Remove duplicate from the other lists
-    list1 = genusList + kingList
-    lenList1 = len(list1) + len(identOrg)
-    rank = list(set(rankList) - set(list1))   
+    mainDict = {'family': [2*numIds, 'ftpdirpaths_family.txt', lineage[4]],
+                'order': [3*numIds, 'ftpdirpaths_order.txt', lineage[3]],
+                'phylum': [4*numIds, 'ftpdirpaths_phylum.txt', lineage[1]],
+                'kingdom': [int(args.num_sp), 'ftpdirpaths_reino.txt', lineage[0]],
+                'otherkingdom': [otherKngdm, 'ftpdirpaths_otroreino.txt', txOtherKingdm]}
     
-    #rankTax plus the missing ids of other lists
-    sampleRank = int(args.num_sp) - lenList1
-    rankIds = random.sample(rank, sampleRank)
-    finalIds = rankIds + list1
+    orden = ('family', 'order', 'phylum', 'otherkingdom', 'kingdom')
     
-    #print finalIds
-    print 'Downloading cds(aa) of these organisms:'
-    for i in finalIds:
-        ncbiFetch(args.email, i)
-    print "Name of each fasta file: organism's binomial name and id(nucleotide database)"
+    #Get ftp paths of each rank to download
+    if mainDict['kingdom'][2] == 2:
+        get_ftpPath(mainDict)
+    else:
+        get_ftpPath4archaea(mainDict)
     
+    #Filter organisms according to the weight of the shadow
+    idsFinal = {}
     
+    for i in orden:
+        idsFinal = get_ids(mainDict[i][1], args.sp_name, mainDict[i][0], idsFinal)
+    
+    #Write log fie
+    with open('log.txt', 'w') as outFile:
+        outFile.write('Downloaded species can be found in these ftp urls\n')
+        for it in idsFinal.keys():
+            outFile.write('%s\t%s\n' %(it,idsFinal[it]))
+    
+    #remove ftp address searched
+    for akeys in mainDict.keys():
+        os.remove(mainDict[akeys][1])
+        
+    os.mkdir('proteomes/')
+    print "Downloading from FTP... \nMay take several minutes \n"
+    for p in idsFinal.keys():
+        url = idsFinal[p]
+        #print p, url
+        os.system('wget -q -c %s*_protein.faa.gz' %url)
+        
+        fileFaa = glob.glob('*_protein.faa.gz')
+        if os.path.isfile(fileFaa[0]):
+            os.system('gzip -d *_protein.faa.gz')
+            os.system('mv *_protein.faa proteomes/%s.fasta' %p)
+        else:
+            print 'Cannot connect with NCBI ftp server\n'
+            print 'The log file contains the name of the species and its ftp address\n'
+            sys.exit(0)
+    
+    print 'The log file contains the name of the downloaded species and its ftp address\n'
+    print 'The proteomes folder contains fasta files to run ShadowCaster, please copy the full path in the configuration file\n'
+            
+        
 if __name__ == '__main__':
     args = arguments()
+    check()
     a = datetime.datetime.now()
     main(args)
     b = datetime.datetime.now()
     c = b - a
-    print 'Took %s to complete' %c
+    print 'Took %s to complete' %c   

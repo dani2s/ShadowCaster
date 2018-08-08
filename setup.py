@@ -2,7 +2,7 @@
 
 from setuptools import setup, find_packages
 
-version = '0.9-beta'
+version = '0.9-b'
 
 description = """ShadowCaster implements an evolutionary model to calculate bayesian likelihoods 
 for each 'alien genes' with an unsual sequence composition according to 
@@ -19,7 +19,7 @@ setup(name='ShadowCaster',
       url= 'https://github.com/dani2s/ShadowCaster',
       license= 'GNU General Public License Version 3',
       packages= find_packages(exclude=['ez_setup', 'examples', 'tests']),
-      scripts=['bin/shadowcaster.py','shadowcaster/generate_R_input.pl','shadowcaster/phylo_shadow_model.R'],
+      scripts=['bin/shadowcaster','shadowcaster/generate_R_input.pl','shadowcaster/phylo_shadow_model.R'],
       include_package_data=True,
       zip_safe=False,
       install_requires=['numpy',

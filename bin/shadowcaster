@@ -25,8 +25,10 @@ import os
 import datetime
 import sys
 import inspect
+import subprocess
 
 from shadowcaster.parser import arguments
+from shadowcaster.check import ValidateFiles
 from shadowcaster.parametric import ParametricMethods
 from shadowcaster.codon_usage import CodonUsage
 from shadowcaster.detect_aliens import alienSVM
@@ -35,6 +37,13 @@ from shadowcaster.orthologs_parse import ParseOrthologsResults
 from shadowcaster.blast_aliens import BlastAtyipical
 from shadowcaster.likelihood import phyloShadowing
 
+def checkPath():
+    rc = subprocess.call(['which', 'orthomcl-pipeline'])
+    if rc == 0:
+        print 'orthomcl-pipeline installed!\n'
+    else:
+        print 'orthomcl-pipeline missing in path! Please check the path in .profile or .bash_profile'
+        sys.exit(0)
 
 def main(config):
     
@@ -47,11 +56,13 @@ def main(config):
     logFile = open('log.txt', 'w')
     logFile.write('Arguments of ShadowCaster \nConfiguration file:\n')
     for key, value in config.iteritems():
-        logFile.write('%s %s\n' %(key,value))
+        logFile.write('%s\t%s\n' %(key,value))
     logFile.close()
         
     
     print >> sys.stderr, "Step 1: Checking input files\n"
+    test = ValidateFiles(config['queryProteome'], config['queryGenome'],config['proteomes'])
+    test.checkProtein()
        
 
     #Create folder for parametric's results
@@ -93,7 +104,7 @@ def main(config):
     #Instance Orthologs class (1 hour each round 10-15 min)
     orthoMcl = Orthologs(config['orthomcl_config'], config['queryProteome'], config['proteomes'])
     orthoMcl.performOrthoMcl() 
-    print >> sys.stderr, "=====OrthoMcl finished====="
+    print >> sys.stderr, "=========OrthoMcl finished=========\n"
 
     #Instance Parse orthologs results (13 min)
     orthoResults = ParseOrthologsResults(config['proteomes'], config['queryProteome'])
@@ -104,7 +115,7 @@ def main(config):
     #Instance Blast atypical class (5 min)
     atypical = BlastAtyipical(listProteomes, phase1Result, config['proteomes'], config['blastp'], config['db26'])
     atypical.performBlastp()
-    print >> sys.stderr, "====Blast atypical genes done====\n\n"
+    print >> sys.stderr, "====Blast atypical genes done====\n"
     
     #Function for calculating likelihood (1min)
     phyloShadowing('orthologs_probabilities.csv', 'alien_svm.csv')
@@ -120,6 +131,7 @@ if __name__ == '__main__':
     print '******************************\n\n'
     print 'Date:%s' %a
     config, args = arguments()
+    checkPath()
     results = main(config)
     b = datetime.datetime.now()
     c = b - a
