@@ -26,6 +26,11 @@ Packages
     pip install numpy scipy biopython pandas ete3 scikit-learn matplotlib
 
 -  R packages: ``cluster`` v2.0.*
+ 
+-  Install figlet. For Linux (Ubuntu) use:
+::
+
+    apt install figlet
 
 
 Other dependencies

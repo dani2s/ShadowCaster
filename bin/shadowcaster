@@ -126,9 +126,7 @@ def main(config):
 
 if __name__ == '__main__':
     a = datetime.datetime.now()
-    print "******************************"
-    print "*********ShadowCaster*********"
-    print '******************************\n\n'
+    os.system('figlet -c ShadowCaster')
     print 'Date:%s' %a
     config, args = arguments()
     checkPath()
