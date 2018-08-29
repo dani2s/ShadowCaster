@@ -16,6 +16,7 @@
     along with this program.  If not, see <http://www.gnu.org/licenses/>.
 '''
 import os
+import shutil
 
 
 
@@ -24,6 +25,13 @@ def phyloShadowing(orthoProb, alienOutput):
     outputR = "alien_likelihoods.csv"
     
     os.system("phylo_shadow_model.R %s %s %s %s " %(orthoProb, alienOutput, imageOut, outputR))
+    
+    shutil.rmtree('/copy_proteomes')
+    os.rmdir('/sequences')
+    os.remove('formatdb.log')
+    os.remove('alien_svm.csv')
+    
+    
 
     
     

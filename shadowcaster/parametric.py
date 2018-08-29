@@ -144,14 +144,14 @@ class ParametricMethods():
             self.kmerWin = self.normalizeData(dataWin)
         else:
             self.kmerWin = dataWin
-        self.kmerWin.to_csv('data%smerCds.csv' %(self.k_length))
+        #self.kmerWin.to_csv('data%smerCds.csv' %(self.k_length))
         
         dataGen = self.calculateKmers(kmerDict, counter, self.genome)
         if self.metric != 'euclidean':
             self.kmerGen = self.normalizeData(dataGen)
         else:
             self.kmerGen = dataGen
-        self.kmerGen.to_csv('data%smerGen.csv' %(self.k_length))
+        #self.kmerGen.to_csv('data%smerGen.csv' %(self.k_length))
         
     
     def metricMeasure(self):

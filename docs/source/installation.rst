@@ -27,7 +27,8 @@ Packages
 
 -  R packages: ``cluster`` v2.0.*
  
--  Install figlet. For Linux (Ubuntu) use:
+-  Install figlet. For Linux (Mint 18.3) use:
+
 ::
 
     apt install figlet
@@ -37,13 +38,14 @@ Other dependencies
 ~~~~~~~~~~~~~~~~~~~
 
 For using the phylogenetic component, some programs are required and should be in the PATH:
+
 -   `BLAST <ftp://ftp.ncbi.nlm.nih.gov/blast/executables/blast+/2.2.26/>`_ 2.2.26+ (blastp needed)
    
 -   `OrthoMcl pipeline <https://github.com/apetkau/orthomcl-pipeline>`_ 
    
 OrthoMcl needs blast v2.2.26(blastall and formatdb), these binary files can be found `here <ftp://ftp.ncbi.nlm.nih.gov/blast/executables/legacy.NOTSUPPORTED/2.2.26/>`_. Download blast-2.2.26-*.tar.gz.
 
-For Linux (Ubuntu) this can be installed through:
+For Linux (Mint 18.3) this can be installed through:
 
 ::
 			
@@ -51,12 +53,20 @@ For Linux (Ubuntu) this can be installed through:
      		
    		
 -   Package emboss. 
-For Linux (Ubuntu) this is installed through:
+
+For Linux (Mint 18.3) this is installed through:
 
 ::
 			
 	apt-get install emboss
 
+
+To check that these dependencies were correctly added in the path, run:
+
+::
+			
+	type orthomcl-pipeline blastall formatdb
+	
 
 Installation of ShadowCaster
 ----------------------------
