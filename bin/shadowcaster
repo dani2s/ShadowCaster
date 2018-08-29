@@ -88,10 +88,10 @@ def main(config):
     print >> sys.stderr, "===Detecting alien with One Class SVM==="
     phase1Result = '%s/alien_genes.fasta' %phase1
     alienSVM(kmerDf, config['queryGenome'], config['nuSVM'])
-	
-	os.remove('mergeCDS.fasta')
-	os.remove('codon_cds.csv')
-	os.remove('codon_mergeSeq.csv')
+    
+    os.remove('mergeCDS.fasta')
+    os.remove('codon_cds.csv')
+    os.remove('codon_mergeSeq.csv')
 
     print >> sys.stderr, "==Composition results can be found in parametric folder==\n"
     
@@ -129,9 +129,9 @@ def main(config):
     
     logPath= os.path.join(wDir, "log.txt")
     finalResultsPath = os.path.join(wDir, "phylogenetic/hgt_candidates.csv")
-	
-	print >> sys.stderr, "Parameters used can be viewed in %s\n" %logPath
-	print >> sys.stderr, "HGT candidates can be found in %s\n\n" %finalResultsPath
+    
+    print >> sys.stderr, "Parameters used can be viewed in %s\n" % logPath
+    print >> sys.stderr, "HGT candidates can be found in %s\n\n" % finalResultsPath
 
 if __name__ == '__main__':
     a = datetime.datetime.now()
