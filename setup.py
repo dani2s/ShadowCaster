@@ -2,7 +2,7 @@
 
 from setuptools import setup, find_packages
 
-version = '0.9-b'
+version = '0.9.1'
 
 description = """ShadowCaster implements an evolutionary model to calculate bayesian likelihoods 
 for each 'alien genes' with an unsual sequence composition according to 
