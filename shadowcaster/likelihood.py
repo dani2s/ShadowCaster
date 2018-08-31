@@ -26,8 +26,8 @@ def phyloShadowing(orthoProb, alienOutput):
     
     os.system("phylo_shadow_model.R %s %s %s %s " %(orthoProb, alienOutput, imageOut, outputR))
     
-    shutil.rmtree('/copy_proteomes')
-    os.rmdir('/sequences')
+    shutil.rmtree('copy_proteomes')
+    os.rmdir('sequences')
     os.remove('formatdb.log')
     os.remove('alien_svm.csv')
     
