@@ -35,11 +35,11 @@ The results provided in the test data repository were obtained running ShadowCas
 Run ShadowCaster
 ----------------
 
-All fasta files are in the ``shadowcaster-input`` and ``ftp-output`` folders. The arguments needed in the args.ini file are:
+All fasta files are in the ``shadowcaster-input`` and ``proteomes-output`` folders. The arguments needed in the args.ini file are:
 
   * query_genome = /home/user/path/to/shadowcaster-input/Rdenitrificans_genome.fasta
   * query_proteome = /home/user/path/to/shadowcaster-input/Rhodanobacter_denitrificans.fasta
-  * proteomes_folder = /home/user/path/to/ftp-output/proteomes/
+  * proteomes_folder = /home/user/path/to/proteomes-output/proteomes/
   * orthomcl_config = /home/user/orthomcl-pipeline/orthomcl.conf
   * blastp26 = Binary file or your command line used of blastp v2.2.26.
   * blasall26 = Binary file or your command line used of blastall v2.2.26.

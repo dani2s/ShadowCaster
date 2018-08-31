@@ -2,6 +2,10 @@
 get_proteomes.py
 ======================
 
+``get_proteomes.py`` implements a method that we apply before finding HGT candidates with ShadowCaster.
+This script retrieves a list of proteomes from phylogenetically related species to the query species (fasta files) from the NCBI ftp. 
+ShadowCaster needs these proteomes to construct a phylogenetic shadow used in its phylogenetic component.
+
 Prerequisites
 -------------
 
@@ -33,5 +37,5 @@ This results in the following output files in the folder named with the species 
     * ``proteomes folder`` Proteomes (fasta file) used to construct the shadow.
 
 
-The results should be similar to those found in the ``ftp-output`` folder of the test data repository, see `here <https://github.com/dani2s/ShadowCaster_testData>`_
+The results should be similar to those found in the ``proteomes-output`` folder of the test data repository, see `here <https://github.com/dani2s/ShadowCaster_testData>`_
 
