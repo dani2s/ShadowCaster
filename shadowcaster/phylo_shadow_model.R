@@ -57,7 +57,7 @@ L[j] <- sum(log(probs))
 
 qHgt = quantile(L, probs = c(0.2))
 png(filename = args[3], width = 800, height = 700)
-hist(L, main = "alien CDS")
+hist(L, main = "Alien genes", xlab = "Log-likelihood")
 dev.off()
 
 test <- list('id'=dat$alien_id, 'log'= L)
