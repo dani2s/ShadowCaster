@@ -29,7 +29,7 @@ Example
 An example of how to run ``get_proteomes.py`` on the test data::
     
     cd ShadowCaster/scripts
-    python get_proteomes.py -n Rhodanobacter_denitrificans -sp 30
+    python get_proteomes.py -n Rhodanobacter_denitrificans -sp 25
 
 This results in the following output files in the folder named with the species name provided:
 

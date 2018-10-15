@@ -8,7 +8,23 @@ Files
 -----
 - **Query genome** *Only fasta files.*
 - **Query proteome** *Only fasta files*
-- **OrthoMcl configuration file**, previously obtained with the installation of OrthoMcl-pipeline(orthomcl.conf).
+- **OrthoMcl configuration file**, previously obtained with the installation of OrthoMcl-pipeline(orthomcl.conf). This file looks like:
+
+::
+	
+	coOrthologTable=CoOrtholog
+	dbConnectString=dbi:mysql:orthomcl:localhost:mysql_local_infile=1
+	dbLogin=orthomcl
+	dbPassword=orthomcl
+	dbVendor=mysql 
+	evalueExponentCutoff=-5
+	inParalogTable=InParalog
+	interTaxonMatchView=InterTaxonMatch
+	oracleIndexTblSpc=NONE
+	orthologTable=Ortholog
+	percentMatchCutoff=50
+	similarSequencesTable=SimilarSequences
+
 
 Path
 ----

@@ -42,12 +42,12 @@ All fasta files are in the ``shadowcaster-input`` and ``proteomes-output`` folde
   * proteomes_folder = /home/user/path/to/proteomes-output/proteomes/
   * orthomcl_config = /home/user/orthomcl-pipeline/orthomcl.conf
   * blastp26 = Binary file or your command line used of blastp v2.2.26.
-  * blasall26 = Binary file or your command line used of blastall v2.2.26.
+  * formatdb26 = Binary file or your command line used of blastall v2.2.26.
   * nuSVM = 0.4
 
 MUST use the full path of the files or directory.
 
-We will run ShadowCaster through: 
+Run ShadowCaster through: 
 
 ::
 

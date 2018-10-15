@@ -9,7 +9,7 @@ Fundamental prerequisites
 
 ::
 
-    python v2.7.*
+    python => v2.7.10
     R => v3.4
     perl => v5.10
 
@@ -39,8 +39,10 @@ Other dependencies
 
 For using the phylogenetic component, some programs are required and should be in the PATH:
 
--   `BLAST <ftp://ftp.ncbi.nlm.nih.gov/blast/executables/blast+/2.2.26/>`_ 2.2.26+ (blastp needed)
-   
+-   `BLAST <ftp://ftp.ncbi.nlm.nih.gov/blast/executables/blast+/2.2.26/>`_ 2.2.26+ (blastp needed).
+
+If you have a newer version of BLAST already installed, you just can copy the path to the executable file for blastp in the configuration file of ShadowCaster.
+
 -   `OrthoMcl pipeline <https://github.com/apetkau/orthomcl-pipeline>`_ 
    
 OrthoMcl needs blast v2.2.26(blastall and formatdb), these binary files can be found `here <ftp://ftp.ncbi.nlm.nih.gov/blast/executables/legacy.NOTSUPPORTED/2.2.26/>`_. Download blast-2.2.26-*.tar.gz.
@@ -50,7 +52,9 @@ For Linux (Mint 18.3) this can be installed through:
 ::
 			
 	apt-get install blast2
-     		
+
+
+More information, see :doc:`suggestions`.      		
    		
 -   Package emboss. 
 
