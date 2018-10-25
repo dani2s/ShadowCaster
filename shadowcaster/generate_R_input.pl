@@ -49,7 +49,7 @@ my $qlength;
 my $seqIOobj = Bio::SeqIO->new(-file=> $input_file);
 while((my $seqobj = $seqIOobj->next_seq())) {
 	my $id = $seqobj->id;
-	$id =~ s/\.\d//;
+	#$id =~ s/\.\d//;
 	my $tmp_fasta = $blastFolder.$id.".fasta";
 	open (FASTA, ">".$tmp_fasta) || die "Can't open $tmp_fasta";
 	print FASTA ">".$id."\n".$seqobj->seq."\n";

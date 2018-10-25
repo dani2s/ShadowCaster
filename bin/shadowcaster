@@ -123,16 +123,17 @@ def main(config):
     atypical.performBlastp()
     
     #Function for calculating likelihood (1min)
-    phyloShadowing('orthologs_probabilities.csv', 'alien_svm.csv')
+    phyloShadowing('orthologs_probabilities.csv', 'alien_svm.csv', config['queryGenome'])
     
     
     print >> sys.stderr, "Phylogenetic results can be found in phylogenetic folder\n"
     
     logPath= os.path.join(wDir, "log.txt")
     finalResultsPath = os.path.join(wDir, "phylogenetic/hgt_candidates.csv")
+    fastaResult = os.path.join(wDir, "phylogenetic/shadowcaster_predictions.fasta")
     
     print >> sys.stderr, "Parameters used can be viewed in %s" % logPath
-    print >> sys.stderr, "HGT candidates can be found in %s\n" % finalResultsPath
+    print >> sys.stderr, "HGT candidates can be found in %s and a fasta file in %s\n" %(finalResultsPath,fastaResult)
 
 if __name__ == '__main__':
     a = datetime.datetime.now()

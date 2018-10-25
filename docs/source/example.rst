@@ -78,6 +78,7 @@ ShadowCaster generates the following files in the output directory.
   * ``alien_likelihoods.csv`` The log likelihood calculated for each alien gene found in the parametric component.
   * ``histogram_alienLikelihoods.png`` Histogram of likelihoods from alien genes.
   * ``hgt_candidates.csv`` List of HGT candidate genes found with the software with their likelihood.
+  * ``shadowcaster_predictions.fasta`` Fasta file with genes predicted as HGT by ShadowCaster.
 
 
 A copy of all the output files can be found in the ``shadowcaster-output`` folder.

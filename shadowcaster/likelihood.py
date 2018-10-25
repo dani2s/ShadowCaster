@@ -17,20 +17,28 @@
 '''
 import os
 import shutil
+import pandas as pd
+from Bio import SeqIO
 
 
 
-def phyloShadowing(orthoProb, alienOutput):
+def phyloShadowing(orthoProb, alienOutput, queryFasta):
     imageOut = "histogram_alienLikelihoods.png"
     outputR = "alien_likelihoods.csv"
     
     os.system("phylo_shadow_model.R %s %s %s %s " %(orthoProb, alienOutput, imageOut, outputR))
     
+    df1 = pd.read_csv('hgt_candidates.csv', index_col = 0)
+    
+    record_dict = SeqIO.to_dict(SeqIO.parse(queryFasta, "fasta"))
+    with open('shadowcaster_predictions.fasta', 'w') as outWrite:
+        for i in df1.index.tolist():
+            outWrite.write('>%s\n%s\n' %(i,str(record_dict[i].seq)))
+            
     shutil.rmtree('copy_proteomes')
     os.rmdir('sequences')
     os.remove('formatdb.log')
     os.remove('alien_svm.csv')
-    
     
 
     
