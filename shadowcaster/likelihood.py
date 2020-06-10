@@ -37,7 +37,7 @@ def phyloShadowing(orthoProb, alienOutput, queryFasta):
             
     shutil.rmtree('copy_proteomes')
     os.rmdir('sequences')
-    os.remove('formatdb.log')
+    #os.remove('formatdb.log')
     os.remove('alien_svm.csv')
     
 
